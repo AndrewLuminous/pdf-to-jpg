@@ -1,4 +1,4 @@
-package com.pdfconverter;
+package com.pdfconverter.model;
 
 import lombok.Getter;
 import lombok.ToString;

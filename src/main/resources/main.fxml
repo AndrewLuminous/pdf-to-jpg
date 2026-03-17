@@ -5,71 +5,301 @@
 <?import javafx.scene.layout.*?>
 
 <VBox xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.pdfconverter.MainController"
-      spacing="12"
-      style="-fx-background-color: #f5f5f5;"
-      prefWidth="560">
+      fx:controller="com.pdfconverter.controller.MainController"
+      spacing="0"
+      prefWidth="540"
+      style="-fx-background-color: #111118;">
 
-    <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
-
-    <!-- Заголовок -->
-    <Label text="PDF to JPG Converter"
-           style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #333;"/>
-
-    <!-- Кнопки управления файлами -->
-    <HBox spacing="8">
-        <Button fx:id="addButton"
-                text="+ Добавить PDF"
-                onAction="#onAddFiles"
-                style="-fx-background-color: #4a90d9; -fx-text-fill: white; -fx-font-size: 13px; -fx-padding: 8 16; -fx-background-radius: 6;"/>
-        <Button fx:id="clearButton"
-                text="Очистить"
-                onAction="#onClear"
-                style="-fx-background-color: #e0e0e0; -fx-text-fill: #555; -fx-font-size: 13px; -fx-padding: 8 16; -fx-background-radius: 6;"/>
+    <!-- Шапка -->
+    <HBox alignment="CENTER_LEFT"
+          style="-fx-background-color: #111118; -fx-padding: 24 28 16 28;">
+        <VBox spacing="4" HBox.hgrow="ALWAYS">
+            <Label text="PDF ⇄ JPG"
+                   style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #ffffff;"/>
+            <Label fx:id="subtitleLabel"
+                   text="Конвертация документов в изображения"
+                   style="-fx-font-size: 12px; -fx-text-fill: rgba(255,255,255,0.35);"/>
+        </VBox>
     </HBox>
 
-    <!-- Список файлов -->
-    <ListView fx:id="fileListView"
-              prefHeight="200"
-              style="-fx-background-radius: 6; -fx-border-radius: 6; -fx-border-color: #ddd;"/>
-
-    <!-- Папка вывода -->
-    <HBox spacing="8" alignment="CENTER_LEFT">
-        <Label text="Папка вывода:"
-               style="-fx-font-size: 13px; -fx-text-fill: #555;"/>
-        <TextField fx:id="outputDirField"
-                   text="./output_jpg"
-                   HBox.hgrow="ALWAYS"
-                   style="-fx-font-size: 13px; -fx-padding: 6 10; -fx-background-radius: 6; -fx-border-radius: 6; -fx-border-color: #ddd;"/>
-        <Button text="Обзор"
-                onAction="#onChooseOutputDir"
-                style="-fx-background-color: #e0e0e0; -fx-text-fill: #555; -fx-padding: 6 12; -fx-background-radius: 6;"/>
+    <!-- Переключатель режимов -->
+    <HBox spacing="0" style="-fx-padding: 0 28 16 28;">
+        <Button fx:id="modePdfToJpgBtn"
+                text="PDF → JPG"
+                onAction="#onSwitchToPdfToJpg"
+                prefHeight="34"
+                style="-fx-background-color: #7c6fff;
+                       -fx-text-fill: white;
+                       -fx-font-size: 12px;
+                       -fx-font-weight: bold;
+                       -fx-background-radius: 8 0 0 8;
+                       -fx-cursor: hand;
+                       -fx-padding: 0 20;"/>
+        <Button fx:id="modeJpgToPdfBtn"
+                text="JPG → PDF"
+                onAction="#onSwitchToJpgToPdf"
+                prefHeight="34"
+                style="-fx-background-color: #23232e;
+                       -fx-text-fill: rgba(255,255,255,0.5);
+                       -fx-font-size: 12px;
+                       -fx-background-radius: 0 8 8 0;
+                       -fx-cursor: hand;
+                       -fx-padding: 0 20;"/>
     </HBox>
 
-    <!-- DPI -->
-    <HBox spacing="8" alignment="CENTER_LEFT">
-        <Label text="DPI:"
-               style="-fx-font-size: 13px; -fx-text-fill: #555;"/>
-        <ComboBox fx:id="dpiComboBox"
-                  style="-fx-font-size: 13px;"/>
-        <Label text="(выше = четче, но медленнее)"
-               style="-fx-font-size: 11px; -fx-text-fill: #999;"/>
-    </HBox>
+    <!-- ===== РЕЖИМ PDF → JPG ===== -->
+    <VBox fx:id="pdfToJpgPane" spacing="0">
+
+        <!-- Dropzone -->
+        <VBox style="-fx-padding: 0 28;">
+            <StackPane fx:id="dropZone"
+                       prefHeight="90"
+                       style="-fx-background-color: #18181f;
+                              -fx-background-radius: 12;
+                              -fx-border-color: rgba(255,255,255,0.12);
+                              -fx-border-radius: 12;
+                              -fx-border-style: dashed;
+                              -fx-border-width: 1.5;
+                              -fx-cursor: hand;">
+                <VBox alignment="CENTER" spacing="8">
+                    <Label text="⬆"
+                           style="-fx-font-size: 22px; -fx-text-fill: rgba(255,255,255,0.2);"/>
+                    <Label fx:id="dropLabel"
+                           text="Перетащите PDF файлы сюда"
+                           style="-fx-font-size: 13px; -fx-text-fill: rgba(255,255,255,0.45);"/>
+                    <Label text="или нажмите «Добавить PDF» ниже"
+                           style="-fx-font-size: 11px; -fx-text-fill: rgba(255,255,255,0.2);"/>
+                </VBox>
+            </StackPane>
+        </VBox>
+
+        <!-- Кнопки -->
+        <HBox spacing="8" style="-fx-padding: 14 28 0 28;">
+            <Button fx:id="addButton"
+                    text="+ Добавить PDF"
+                    onAction="#onAddFiles"
+                    prefHeight="32"
+                    style="-fx-background-color: #23232e;
+                           -fx-text-fill: rgba(255,255,255,0.75);
+                           -fx-font-size: 12px;
+                           -fx-background-radius: 7;
+                           -fx-cursor: hand;
+                           -fx-padding: 0 16;"/>
+            <Button fx:id="clearButton"
+                    text="Очистить"
+                    onAction="#onClear"
+                    prefHeight="32"
+                    style="-fx-background-color: transparent;
+                           -fx-text-fill: rgba(255,255,255,0.3);
+                           -fx-font-size: 12px;
+                           -fx-background-radius: 7;
+                           -fx-cursor: hand;
+                           -fx-padding: 0 16;"/>
+        </HBox>
+
+        <!-- Список PDF файлов -->
+        <StackPane prefHeight="180" style="-fx-padding: 10 28 0 28;">
+            <ListView fx:id="fileListView"
+                      style="-fx-background-color: #18181f;
+                             -fx-background-radius: 10;
+                             -fx-border-width: 0;
+                             -fx-control-inner-background: #18181f;
+                             -fx-padding: 4;"/>
+            <VBox fx:id="emptyPlaceholder" alignment="CENTER" spacing="8"
+                  mouseTransparent="true"
+                  style="-fx-background-color: #18181f; -fx-background-radius: 10;">
+                <Label text="📄"
+                       style="-fx-font-size: 32px; -fx-opacity: 0.12;"/>
+                <Label text="Файлы не добавлены"
+                       style="-fx-font-size: 12px; -fx-text-fill: rgba(255,255,255,0.2);"/>
+            </VBox>
+        </StackPane>
+
+        <!-- Настройки PDF→JPG -->
+        <VBox spacing="10" style="-fx-padding: 16 28 0 28;">
+            <HBox spacing="8" alignment="CENTER_LEFT">
+                <Label text="Папка"
+                       minWidth="44"
+                       style="-fx-font-size: 12px; -fx-text-fill: rgba(255,255,255,0.85);"/>
+                <TextField fx:id="outputDirField"
+                           text="./output_jpg"
+                           HBox.hgrow="ALWAYS"
+                           prefHeight="32"
+                           style="-fx-background-color: #18181f;
+                                  -fx-text-fill: rgba(255,255,255,0.9);
+                                  -fx-background-radius: 7;
+                                  -fx-border-width: 0;
+                                  -fx-padding: 0 10;
+                                  -fx-font-size: 12px;"/>
+                <Button fx:id="browseButton"
+                        text="···"
+                        onAction="#onChooseOutputDir"
+                        prefHeight="32"
+                        prefWidth="32"
+                        style="-fx-background-color: #23232e;
+                               -fx-text-fill: rgba(255,255,255,0.6);
+                               -fx-font-size: 13px;
+                               -fx-background-radius: 7;
+                               -fx-cursor: hand;"/>
+            </HBox>
+            <HBox spacing="8" alignment="CENTER_LEFT">
+                <Label text="DPI"
+                       minWidth="44"
+                       style="-fx-font-size: 12px; -fx-text-fill: rgba(255,255,255,0.85);"/>
+                <ComboBox fx:id="dpiComboBox"
+                          prefHeight="32"
+                          style="-fx-background-color: #18181f;
+                                 -fx-border-width: 0;
+                                 -fx-background-radius: 7;
+                                 -fx-font-size: 12px;
+                                 -fx-text-fill: rgba(255,255,255,0.9);"/>
+                <Label text="выше = чётче, но памяти занимает больше"
+                       style="-fx-font-size: 11px; -fx-text-fill: rgba(255,255,255,0.5);"/>
+            </HBox>
+        </VBox>
+
+    </VBox>
+
+    <!-- ===== РЕЖИМ JPG → PDF ===== -->
+    <VBox fx:id="jpgToPdfPane" spacing="0" managed="false" visible="false">
+
+        <!-- Dropzone для картинок -->
+        <VBox style="-fx-padding: 0 28;">
+            <StackPane fx:id="imageDropZone"
+                       prefHeight="90"
+                       style="-fx-background-color: #18181f;
+                              -fx-background-radius: 12;
+                              -fx-border-color: rgba(255,255,255,0.12);
+                              -fx-border-radius: 12;
+                              -fx-border-style: dashed;
+                              -fx-border-width: 1.5;
+                              -fx-cursor: hand;">
+                <VBox alignment="CENTER" spacing="8">
+                    <Label text="⬆"
+                           style="-fx-font-size: 22px; -fx-text-fill: rgba(255,255,255,0.2);"/>
+                    <Label text="Перетащите JPG / PNG файлы сюда"
+                           style="-fx-font-size: 13px; -fx-text-fill: rgba(255,255,255,0.45);"/>
+                    <Label text="или нажмите «Добавить картинки» ниже"
+                           style="-fx-font-size: 11px; -fx-text-fill: rgba(255,255,255,0.2);"/>
+                </VBox>
+            </StackPane>
+        </VBox>
+
+        <!-- Кнопки -->
+        <HBox spacing="8" style="-fx-padding: 14 28 0 28;">
+            <Button fx:id="addImageButton"
+                    text="+ Добавить картинки"
+                    onAction="#onAddImages"
+                    prefHeight="32"
+                    style="-fx-background-color: #23232e;
+                           -fx-text-fill: rgba(255,255,255,0.75);
+                           -fx-font-size: 12px;
+                           -fx-background-radius: 7;
+                           -fx-cursor: hand;
+                           -fx-padding: 0 16;"/>
+            <Button fx:id="clearImageButton"
+                    text="Очистить"
+                    onAction="#onClearImages"
+                    prefHeight="32"
+                    style="-fx-background-color: transparent;
+                           -fx-text-fill: rgba(255,255,255,0.3);
+                           -fx-font-size: 12px;
+                           -fx-background-radius: 7;
+                           -fx-cursor: hand;
+                           -fx-padding: 0 16;"/>
+        </HBox>
+
+        <!-- Список картинок -->
+        <StackPane prefHeight="180" style="-fx-padding: 10 28 0 28;">
+            <ListView fx:id="imageListView"
+                      style="-fx-background-color: #18181f;
+                             -fx-background-radius: 10;
+                             -fx-border-width: 0;
+                             -fx-control-inner-background: #18181f;
+                             -fx-padding: 4;"/>
+            <VBox fx:id="imageEmptyPlaceholder" alignment="CENTER" spacing="8"
+                  mouseTransparent="true"
+                  style="-fx-background-color: #18181f; -fx-background-radius: 10;">
+                <Label text="🖼"
+                       style="-fx-font-size: 32px; -fx-opacity: 0.12;"/>
+                <Label text="Картинки не добавлены"
+                       style="-fx-font-size: 12px; -fx-text-fill: rgba(255,255,255,0.2);"/>
+            </VBox>
+        </StackPane>
+
+        <!-- Настройки JPG→PDF -->
+        <VBox spacing="10" style="-fx-padding: 16 28 0 28;">
+            <HBox spacing="8" alignment="CENTER_LEFT">
+                <Label text="Файл"
+                       minWidth="44"
+                       style="-fx-font-size: 12px; -fx-text-fill: rgba(255,255,255,0.85);"/>
+                <TextField fx:id="outputPdfNameField"
+                           text="output.pdf"
+                           HBox.hgrow="ALWAYS"
+                           prefHeight="32"
+                           style="-fx-background-color: #18181f;
+                                  -fx-text-fill: rgba(255,255,255,0.9);
+                                  -fx-background-radius: 7;
+                                  -fx-border-width: 0;
+                                  -fx-padding: 0 10;
+                                  -fx-font-size: 12px;"/>
+            </HBox>
+            <HBox spacing="8" alignment="CENTER_LEFT">
+                <Label text="Папка"
+                       minWidth="44"
+                       style="-fx-font-size: 12px; -fx-text-fill: rgba(255,255,255,0.85);"/>
+                <TextField fx:id="outputPdfDirField"
+                           text="./output_pdf"
+                           HBox.hgrow="ALWAYS"
+                           prefHeight="32"
+                           style="-fx-background-color: #18181f;
+                                  -fx-text-fill: rgba(255,255,255,0.9);
+                                  -fx-background-radius: 7;
+                                  -fx-border-width: 0;
+                                  -fx-padding: 0 10;
+                                  -fx-font-size: 12px;"/>
+                <Button fx:id="browsePdfButton"
+                        text="···"
+                        onAction="#onChoosePdfOutputDir"
+                        prefHeight="32"
+                        prefWidth="32"
+                        style="-fx-background-color: #23232e;
+                               -fx-text-fill: rgba(255,255,255,0.6);
+                               -fx-font-size: 13px;
+                               -fx-background-radius: 7;
+                               -fx-cursor: hand;"/>
+            </HBox>
+        </VBox>
+
+    </VBox>
 
     <!-- Прогресс -->
-    <ProgressBar fx:id="progressBar"
-                 progress="0"
-                 maxWidth="Infinity"
-                 style="-fx-accent: #4a90d9;"/>
-    <Label fx:id="statusLabel"
-           text="Добавьте PDF файлы для начала"
-           style="-fx-font-size: 12px; -fx-text-fill: #888;"/>
+    <VBox spacing="6" style="-fx-padding: 16 28 0 28;">
+        <ProgressBar fx:id="progressBar"
+                     progress="0"
+                     maxWidth="Infinity"
+                     prefHeight="3"
+                     style="-fx-accent: #7c6fff;
+                            -fx-background-color: #2a2540;
+                            -fx-background-radius: 2;"/>
+        <Label fx:id="statusLabel"
+               text=""
+               style="-fx-font-size: 11px; -fx-text-fill: rgba(255,255,255,0.4);"/>
+    </VBox>
 
-    <!-- Кнопка конвертации -->
-    <Button fx:id="convertButton"
-            text="Конвертировать"
-            onAction="#onConvert"
-            maxWidth="Infinity"
-            style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 10; -fx-background-radius: 6;"/>
+    <!-- CTA кнопка -->
+    <VBox style="-fx-padding: 14 28 28 28;">
+        <Button fx:id="convertButton"
+                text="Конвертировать"
+                onAction="#onConvert"
+                maxWidth="Infinity"
+                prefHeight="44"
+                style="-fx-background-color: #7c6fff;
+                       -fx-text-fill: #ffffff;
+                       -fx-font-size: 14px;
+                       -fx-font-weight: bold;
+                       -fx-background-radius: 10;
+                       -fx-cursor: hand;"/>
+    </VBox>
 
 </VBox>

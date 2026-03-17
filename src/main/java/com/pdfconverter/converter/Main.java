@@ -1,4 +1,4 @@
-package com.pdfconverter;
+package com.pdfconverter.converter;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

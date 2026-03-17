@@ -1,4 +1,5 @@
-package com.pdfconverter;
+package com.pdfconverter.converter;
+import com.pdfconverter.model.ConversionResult;
 import org.apache.pdfbox.Loader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

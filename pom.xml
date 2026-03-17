@@ -70,7 +70,7 @@
         <artifactId>javafx-maven-plugin</artifactId>
         <version>0.0.8</version>
         <configuration>
-          <mainClass>com.pdfconverter.Main</mainClass>
+          <mainClass>com.pdfconverter.converter.Main</mainClass>
           <options>
             <option>-Dfile.encoding=UTF-8</option>
           </options>
@@ -103,7 +103,7 @@
         <configuration>
           <archive>
             <manifest>
-              <mainClass>com.pdfconverter.Main</mainClass>
+              <mainClass>com.pdfconverter.converter.Main</mainClass>
               <addClasspath>true</addClasspath>
               <classpathPrefix>libs/</classpathPrefix>
             </manifest>
@@ -128,7 +128,7 @@
           <!-- Папка с JAR и libs/ -->
           <input>${project.build.directory}</input>
           <mainJar>pdf-to-jpg-app.jar</mainJar>
-          <mainClass>com.pdfconverter.Main</mainClass>
+          <mainClass>com.pdfconverter.converter.Main</mainClass>
 
           <destination>${project.build.directory}/dist</destination>
           <type>EXE</type>
