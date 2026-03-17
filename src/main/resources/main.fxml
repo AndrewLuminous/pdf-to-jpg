@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.pdfconverter.MainController"
+      spacing="12"
+      style="-fx-background-color: #f5f5f5;"
+      prefWidth="560">
+
+    <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
+
+    <!-- Заголовок -->
+    <Label text="PDF to JPG Converter"
+           style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #333;"/>
+
+    <!-- Кнопки управления файлами -->
+    <HBox spacing="8">
+        <Button fx:id="addButton"
+                text="+ Добавить PDF"
+                onAction="#onAddFiles"
+                style="-fx-background-color: #4a90d9; -fx-text-fill: white; -fx-font-size: 13px; -fx-padding: 8 16; -fx-background-radius: 6;"/>
+        <Button fx:id="clearButton"
+                text="Очистить"
+                onAction="#onClear"
+                style="-fx-background-color: #e0e0e0; -fx-text-fill: #555; -fx-font-size: 13px; -fx-padding: 8 16; -fx-background-radius: 6;"/>
+    </HBox>
+
+    <!-- Список файлов -->
+    <ListView fx:id="fileListView"
+              prefHeight="200"
+              style="-fx-background-radius: 6; -fx-border-radius: 6; -fx-border-color: #ddd;"/>
+
+    <!-- Папка вывода -->
+    <HBox spacing="8" alignment="CENTER_LEFT">
+        <Label text="Папка вывода:"
+               style="-fx-font-size: 13px; -fx-text-fill: #555;"/>
+        <TextField fx:id="outputDirField"
+                   text="./output_jpg"
+                   HBox.hgrow="ALWAYS"
+                   style="-fx-font-size: 13px; -fx-padding: 6 10; -fx-background-radius: 6; -fx-border-radius: 6; -fx-border-color: #ddd;"/>
+        <Button text="Обзор"
+                onAction="#onChooseOutputDir"
+                style="-fx-background-color: #e0e0e0; -fx-text-fill: #555; -fx-padding: 6 12; -fx-background-radius: 6;"/>
+    </HBox>
+
+    <!-- DPI -->
+    <HBox spacing="8" alignment="CENTER_LEFT">
+        <Label text="DPI:"
+               style="-fx-font-size: 13px; -fx-text-fill: #555;"/>
+        <ComboBox fx:id="dpiComboBox"
+                  style="-fx-font-size: 13px;"/>
+        <Label text="(выше = четче, но медленнее)"
+               style="-fx-font-size: 11px; -fx-text-fill: #999;"/>
+    </HBox>
+
+    <!-- Прогресс -->
+    <ProgressBar fx:id="progressBar"
+                 progress="0"
+                 maxWidth="Infinity"
+                 style="-fx-accent: #4a90d9;"/>
+    <Label fx:id="statusLabel"
+           text="Добавьте PDF файлы для начала"
+           style="-fx-font-size: 12px; -fx-text-fill: #888;"/>
+
+    <!-- Кнопка конвертации -->
+    <Button fx:id="convertButton"
+            text="Конвертировать"
+            onAction="#onConvert"
+            maxWidth="Infinity"
+            style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 10; -fx-background-radius: 6;"/>
+
+</VBox>

@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.pdfconverter</groupId>
+  <artifactId>pdf-to-jpg</artifactId>
+  <version>1.0.0</version>
+  <packaging>jar</packaging>
+
+  <properties>
+    <maven.compiler.source>21</maven.compiler.source>
+    <maven.compiler.target>21</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <javafx.version>21.0.2</javafx.version>
+    <pdfbox.version>3.0.2</pdfbox.version>
+    <lombok.version>1.18.36</lombok.version>
+    <slf4j.version>2.0.13</slf4j.version>
+    <logback.version>1.5.6</logback.version>
+  </properties>
+
+  <dependencies>
+    <!-- JavaFX -->
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-controls</artifactId>
+      <version>${javafx.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-fxml</artifactId>
+      <version>${javafx.version}</version>
+    </dependency>
+
+    <!-- Apache PDFBox -->
+    <dependency>
+      <groupId>org.apache.pdfbox</groupId>
+      <artifactId>pdfbox</artifactId>
+      <version>${pdfbox.version}</version>
+    </dependency>
+
+    <!-- Lombok -->
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>${lombok.version}</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <!-- Logging -->
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>${slf4j.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <version>${logback.version}</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <!-- Запуск в dev режиме -->
+      <plugin>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-maven-plugin</artifactId>
+        <version>0.0.8</version>
+        <configuration>
+          <mainClass>com.pdfconverter.Main</mainClass>
+          <options>
+            <option>-Dfile.encoding=UTF-8</option>
+          </options>
+        </configuration>
+      </plugin>
+
+      <!-- Копируем все зависимости в target/libs -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>3.6.1</version>
+        <executions>
+          <execution>
+            <id>copy-dependencies</id>
+            <phase>package</phase>
+            <goals><goal>copy-dependencies</goal></goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/libs</outputDirectory>
+              <excludeScope>provided</excludeScope>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Собираем тонкий JAR с правильным манифестом -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.4.1</version>
+        <configuration>
+          <archive>
+            <manifest>
+              <mainClass>com.pdfconverter.Main</mainClass>
+              <addClasspath>true</addClasspath>
+              <classpathPrefix>libs/</classpathPrefix>
+            </manifest>
+          </archive>
+          <finalName>pdf-to-jpg-app</finalName>
+        </configuration>
+      </plugin>
+
+      <!-- jpackage — упаковка в .exe -->
+      <plugin>
+        <groupId>org.panteleyev</groupId>
+        <artifactId>jpackage-maven-plugin</artifactId>
+        <version>1.6.5</version>
+        <configuration>
+          <name>PdfToJpg</name>
+          <appVersion>1.0.0</appVersion>
+          <vendor>YourName</vendor>
+          <copyright>2026</copyright>
+          <description>PDF to JPG Converter</description>
+          <icon>src/main/resources/app.ico</icon>
+
+          <!-- Папка с JAR и libs/ -->
+          <input>${project.build.directory}</input>
+          <mainJar>pdf-to-jpg-app.jar</mainJar>
+          <mainClass>com.pdfconverter.Main</mainClass>
+
+          <destination>${project.build.directory}/dist</destination>
+          <type>EXE</type>
+
+          <winDirChooser>true</winDirChooser>
+          <winShortcut>true</winShortcut>
+          <winMenu>true</winMenu>
+          <winMenuGroup>PdfToJpg</winMenuGroup>
+
+          <javaOptions>
+            <option>-Dfile.encoding=UTF-8</option>
+            <option>--module-path</option>
+            <option>$APPDIR/libs</option>
+            <option>--add-modules</option>
+            <option>javafx.controls,javafx.fxml</option>
+          </javaOptions>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <id>central</id>
+      <url>https://repo.maven.apache.org/maven2</url>
+    </pluginRepository>
+  </pluginRepositories>
+
+</project>
