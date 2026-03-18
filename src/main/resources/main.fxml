@@ -10,7 +10,6 @@
       prefWidth="540"
       style="-fx-background-color: #111118;">
 
-    <!-- Шапка -->
     <HBox alignment="CENTER_LEFT"
           style="-fx-background-color: #111118; -fx-padding: 24 28 16 28;">
         <VBox spacing="4" HBox.hgrow="ALWAYS">
@@ -22,7 +21,6 @@
         </VBox>
     </HBox>
 
-    <!-- Переключатель режимов -->
     <HBox spacing="0" style="-fx-padding: 0 28 16 28;">
         <Button fx:id="modePdfToJpgBtn"
                 text="PDF → JPG"
@@ -47,10 +45,8 @@
                        -fx-padding: 0 20;"/>
     </HBox>
 
-    <!-- ===== РЕЖИМ PDF → JPG ===== -->
     <VBox fx:id="pdfToJpgPane" spacing="0">
 
-        <!-- Dropzone -->
         <VBox style="-fx-padding: 0 28;">
             <StackPane fx:id="dropZone"
                        prefHeight="90"
@@ -73,7 +69,6 @@
             </StackPane>
         </VBox>
 
-        <!-- Кнопки -->
         <HBox spacing="8" style="-fx-padding: 14 28 0 28;">
             <Button fx:id="addButton"
                     text="+ Добавить PDF"
@@ -97,7 +92,6 @@
                            -fx-padding: 0 16;"/>
         </HBox>
 
-        <!-- Список PDF файлов -->
         <StackPane prefHeight="180" style="-fx-padding: 10 28 0 28;">
             <ListView fx:id="fileListView"
                       style="-fx-background-color: #18181f;
@@ -115,7 +109,6 @@
             </VBox>
         </StackPane>
 
-        <!-- Настройки PDF→JPG -->
         <VBox spacing="10" style="-fx-padding: 16 28 0 28;">
             <HBox spacing="8" alignment="CENTER_LEFT">
                 <Label text="Папка"
@@ -160,10 +153,8 @@
 
     </VBox>
 
-    <!-- ===== РЕЖИМ JPG → PDF ===== -->
     <VBox fx:id="jpgToPdfPane" spacing="0" managed="false" visible="false">
 
-        <!-- Dropzone для картинок -->
         <VBox style="-fx-padding: 0 28;">
             <StackPane fx:id="imageDropZone"
                        prefHeight="90"
@@ -185,7 +176,6 @@
             </StackPane>
         </VBox>
 
-        <!-- Кнопки -->
         <HBox spacing="8" style="-fx-padding: 14 28 0 28;">
             <Button fx:id="addImageButton"
                     text="+ Добавить картинки"
@@ -209,7 +199,6 @@
                            -fx-padding: 0 16;"/>
         </HBox>
 
-        <!-- Список картинок -->
         <StackPane prefHeight="180" style="-fx-padding: 10 28 0 28;">
             <ListView fx:id="imageListView"
                       style="-fx-background-color: #18181f;
@@ -227,7 +216,6 @@
             </VBox>
         </StackPane>
 
-        <!-- Настройки JPG→PDF -->
         <VBox spacing="10" style="-fx-padding: 16 28 0 28;">
             <HBox spacing="8" alignment="CENTER_LEFT">
                 <Label text="Файл"
@@ -273,7 +261,6 @@
 
     </VBox>
 
-    <!-- Прогресс -->
     <VBox spacing="6" style="-fx-padding: 16 28 0 28;">
         <ProgressBar fx:id="progressBar"
                      progress="0"
@@ -287,7 +274,6 @@
                style="-fx-font-size: 11px; -fx-text-fill: rgba(255,255,255,0.4);"/>
     </VBox>
 
-    <!-- CTA кнопка -->
     <VBox style="-fx-padding: 14 28 28 28;">
         <Button fx:id="convertButton"
                 text="Конвертировать"

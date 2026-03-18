@@ -55,7 +55,6 @@ public class PdfConverter {
         }
     }
 
-    /** Убирает расширение из имени файла: "report.pdf" → "report" */
     private String getBaseName(String filename) {
         int dotIndex = filename.lastIndexOf('.');
         return dotIndex > 0 ? filename.substring(0, dotIndex) : filename;

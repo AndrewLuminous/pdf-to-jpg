@@ -22,7 +22,6 @@
   </properties>
 
   <dependencies>
-    <!-- JavaFX -->
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-controls</artifactId>
@@ -34,14 +33,12 @@
       <version>${javafx.version}</version>
     </dependency>
 
-    <!-- Apache PDFBox -->
     <dependency>
       <groupId>org.apache.pdfbox</groupId>
       <artifactId>pdfbox</artifactId>
       <version>${pdfbox.version}</version>
     </dependency>
 
-    <!-- Lombok -->
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
@@ -49,7 +46,6 @@
       <scope>provided</scope>
     </dependency>
 
-    <!-- Logging -->
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
@@ -64,7 +60,6 @@
 
   <build>
     <plugins>
-      <!-- Запуск в dev режиме -->
       <plugin>
         <groupId>org.openjfx</groupId>
         <artifactId>javafx-maven-plugin</artifactId>
@@ -77,7 +72,6 @@
         </configuration>
       </plugin>
 
-      <!-- Копируем все зависимости в target/libs -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-dependency-plugin</artifactId>
@@ -95,7 +89,6 @@
         </executions>
       </plugin>
 
-      <!-- Собираем тонкий JAR с правильным манифестом -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
@@ -112,20 +105,18 @@
         </configuration>
       </plugin>
 
-      <!-- jpackage — упаковка в .exe -->
       <plugin>
         <groupId>org.panteleyev</groupId>
         <artifactId>jpackage-maven-plugin</artifactId>
         <version>1.6.5</version>
         <configuration>
           <name>PdfToJpg</name>
-          <appVersion>1.0.0</appVersion>
-          <vendor>YourName</vendor>
+          <appVersion>1.2.0</appVersion>
+          <vendor>AndrewLuminous</vendor>
           <copyright>2026</copyright>
           <description>PDF to JPG Converter</description>
           <icon>src/main/resources/app.ico</icon>
 
-          <!-- Папка с JAR и libs/ -->
           <input>${project.build.directory}</input>
           <mainJar>pdf-to-jpg-app.jar</mainJar>
           <mainClass>com.pdfconverter.converter.Main</mainClass>

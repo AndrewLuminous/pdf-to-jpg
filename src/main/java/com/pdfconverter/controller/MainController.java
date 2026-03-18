@@ -62,7 +62,6 @@ public class MainController {
     public void initialize() {
         log.debug("Инициализация MainController");
 
-        // ComboBox DPI
         dpiComboBox.setItems(FXCollections.observableArrayList(72, 100, 150, 200, 300));
         dpiComboBox.setValue(200);
         dpiComboBox.setCellFactory(lv -> new ListCell<Integer>() {
@@ -88,7 +87,6 @@ public class MainController {
             }
         });
 
-        // Drag & Drop — PDF режим
         dropZone.setOnDragOver(event -> {
             if (event.getDragboard().hasFiles()) {
                 event.acceptTransferModes(javafx.scene.input.TransferMode.COPY);
@@ -102,7 +100,6 @@ public class MainController {
         });
         dropZone.setOnMouseClicked(e -> onAddFiles());
 
-        // Drag & Drop — JPG режим
         imageDropZone.setOnDragOver(event -> {
             if (event.getDragboard().hasFiles()) {
                 event.acceptTransferModes(javafx.scene.input.TransferMode.COPY);
@@ -116,11 +113,8 @@ public class MainController {
         });
         imageDropZone.setOnMouseClicked(e -> onAddImages());
 
-        // Hover эффекты
         setupHover(addButton, "#23232e", "#3a3a50",
                 "rgba(255,255,255,0.75)", "12px", "7", "0 16");
-        setupHover(clearButton, "transparent", "transparent",
-                "rgba(255,255,255,0.3)", "12px", "7", "0 16");
         setupHover(addImageButton, "#23232e", "#3a3a50",
                 "rgba(255,255,255,0.75)", "12px", "7", "0 16");
         setupHover(clearImageButton, "transparent", "transparent",
@@ -134,6 +128,38 @@ public class MainController {
                 "-fx-background-color: #7c6fff; -fx-text-fill: #ffffff;" +
                         "-fx-font-size: 14px; -fx-font-weight: bold;" +
                         "-fx-background-radius: 10; -fx-cursor: hand;"));
+        clearButton.setOnMouseEntered(e -> clearButton.setStyle(
+                "-fx-background-color: transparent;" +
+                        "-fx-text-fill: rgba(255,255,255,0.7);" +
+                        "-fx-font-size: 12px;" +
+                        "-fx-background-radius: 7;" +
+                        "-fx-cursor: hand;" +
+                        "-fx-padding: 0 16;"
+        ));
+        clearButton.setOnMouseExited(e -> clearButton.setStyle(
+                "-fx-background-color: transparent;" +
+                        "-fx-text-fill: rgba(255,255,255,0.3);" +
+                        "-fx-font-size: 12px;" +
+                        "-fx-background-radius: 7;" +
+                        "-fx-cursor: hand;" +
+                        "-fx-padding: 0 16;"
+        ));
+        clearImageButton.setOnMouseEntered(e -> clearImageButton.setStyle(
+                "-fx-background-color: transparent;" +
+                        "-fx-text-fill: rgba(255,255,255,0.7);" +
+                        "-fx-font-size: 12px;" +
+                        "-fx-background-radius: 7;" +
+                        "-fx-cursor: hand;" +
+                        "-fx-padding: 0 16;"
+        ));
+        clearImageButton.setOnMouseExited(e -> clearImageButton.setStyle(
+                "-fx-background-color: transparent;" +
+                        "-fx-text-fill: rgba(255,255,255,0.3);" +
+                        "-fx-font-size: 12px;" +
+                        "-fx-background-radius: 7;" +
+                        "-fx-cursor: hand;" +
+                        "-fx-padding: 0 16;"
+        ));
 
         setupDropZoneHover(dropZone);
         setupDropZoneHover(imageDropZone);
@@ -141,7 +167,6 @@ public class MainController {
         setupBrowseHover(browseButton);
         setupBrowseHover(browsePdfButton);
 
-        // ProgressBar стиль
         progressBar.skinProperty().addListener((obs, old, newSkin) -> {
             if (newSkin != null) {
                 progressBar.lookup(".track").setStyle("-fx-background-color: #2a2540;");
@@ -149,12 +174,10 @@ public class MainController {
             }
         });
 
-        // CellFactory для списков
         fileListView.setCellFactory(lv -> new FileCell(pdfFiles, fileListView, emptyPlaceholder));
         imageListView.setCellFactory(lv -> new FileCell(imageFiles, imageListView, imageEmptyPlaceholder));
     }
 
-    // ===== ПЕРЕКЛЮЧЕНИЕ РЕЖИМОВ =====
 
     @FXML
     private void onSwitchToPdfToJpg() {
@@ -194,7 +217,6 @@ public class MainController {
         log.debug("Переключено на режим JPG → PDF");
     }
 
-    // ===== PDF → JPG =====
 
     @FXML
     private void onAddFiles() {
@@ -241,8 +263,6 @@ public class MainController {
         emptyPlaceholder.setVisible(pdfFiles.isEmpty());
     }
 
-    // ===== JPG → PDF =====
-
     @FXML
     private void onAddImages() {
         FileChooser chooser = new FileChooser();
@@ -262,9 +282,37 @@ public class MainController {
                 imageFiles.add(file);
             }
         }
+
+        imageFiles.sort((a, b) -> {
+            String nameA = a.getName();
+            String nameB = b.getName();
+            return naturalCompare(nameA, nameB);
+        });
+
         log.info("Добавлено {} картинок", imageFiles.size() - before);
         refreshImageList();
         updateStatus();
+    }
+
+    private int naturalCompare(String a, String b) {
+        int i = 0, j = 0;
+        while (i < a.length() && j < b.length()) {
+            char ca = a.charAt(i);
+            char cb = b.charAt(j);
+
+            if (Character.isDigit(ca) && Character.isDigit(cb)) {
+                int numStart1 = i, numStart2 = j;
+                while (i < a.length() && Character.isDigit(a.charAt(i))) i++;
+                while (j < b.length() && Character.isDigit(b.charAt(j))) j++;
+                int num1 = Integer.parseInt(a.substring(numStart1, i));
+                int num2 = Integer.parseInt(b.substring(numStart2, j));
+                if (num1 != num2) return Integer.compare(num1, num2);
+            } else {
+                if (ca != cb) return Character.compare(ca, cb);
+                i++; j++;
+            }
+        }
+        return Integer.compare(a.length(), b.length());
     }
 
     @FXML
@@ -290,7 +338,6 @@ public class MainController {
         imageEmptyPlaceholder.setVisible(imageFiles.isEmpty());
     }
 
-    // ===== КОНВЕРТАЦИЯ =====
 
     @FXML
     private void onConvert() {
@@ -401,7 +448,6 @@ public class MainController {
         alert.showAndWait();
     }
 
-    // ===== HOVER HELPERS =====
 
     private void setupHover(Button btn, String bgDefault, String bgHover,
                             String textColor, String fontSize, String radius, String padding) {
@@ -433,8 +479,6 @@ public class MainController {
                 "-fx-background-color: #23232e; -fx-text-fill: rgba(255,255,255,0.6);" +
                         "-fx-font-size: 13px; -fx-background-radius: 7; -fx-cursor: hand;"));
     }
-
-    // ===== CELL FACTORY =====
 
     private class FileCell extends ListCell<File> {
         private final HBox container = new HBox();
