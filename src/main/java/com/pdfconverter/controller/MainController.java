@@ -21,7 +21,6 @@ import java.util.List;
 @Slf4j
 public class MainController {
 
-    // Общие элементы
     @FXML private Button convertButton;
     @FXML private ProgressBar progressBar;
     @FXML private Label statusLabel;
@@ -31,7 +30,6 @@ public class MainController {
     @FXML private VBox pdfToJpgPane;
     @FXML private VBox jpgToPdfPane;
 
-    // PDF → JPG элементы
     @FXML private Button addButton;
     @FXML private Button clearButton;
     @FXML private Button browseButton;
@@ -42,7 +40,6 @@ public class MainController {
     @FXML private Label dropLabel;
     @FXML private VBox emptyPlaceholder;
 
-    // JPG → PDF элементы
     @FXML private Button addImageButton;
     @FXML private Button clearImageButton;
     @FXML private Button browsePdfButton;
