@@ -8,7 +8,7 @@
 $\color{Magenta}{\text{конвертация одного или нескольких PDF/Images файлов за раз}}$
   </h3>
 
-  [Последний релиз этого декстопного приложения](https://github.com/AndrewLuminous/pdf-to-jpg/releases/tag)
+  [Последний релиз этого декстопного приложения](https://github.com/AndrewLuminous/pdf-to-jpg/releases)
 <br>
 <br>
 
